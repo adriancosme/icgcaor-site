@@ -1,4 +1,4 @@
-const ENDPOINT = process.env.API_URL || "http://localhost:3000";
+const ENDPOINT = import.meta.env.API_URL || "http://localhost:3000";
 
 export const downloadCSVProducts = ({
   dateStart,
