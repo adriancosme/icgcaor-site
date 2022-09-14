@@ -13,19 +13,28 @@ export default function useProducts() {
     getCountProducts().then((res) => {
       setCountProducts(res.data);
     });
-    getLastUpdate().then((res) => {
-      const date = new Date(res.data.createdAt);
-      setLastUpdate(
-        new Intl.DateTimeFormat("es-MX", {
-          hour: "2-digit",
-          minute: "2-digit",
-          day: "2-digit",
-          month: "2-digit",
-          year: "2-digit",
-          timeZoneName: "longOffset",
-        }).format(date)
-      );
-    });
+    getLastUpdate()
+      .then((res) => {
+        if (!res.data || res.data.createdAt == null) {
+          setLastUpdate("No hay actualizaciones recientes");
+          return;
+        }
+        const date = new Date(res.data.createdAt);
+        setLastUpdate(
+          new Intl.DateTimeFormat("es-MX", {
+            hour: "2-digit",
+            minute: "2-digit",
+            day: "2-digit",
+            month: "2-digit",
+            year: "2-digit",
+            timeZoneName: "longOffset",
+          }).format(date)
+        );
+        return;
+      })
+      .catch((err) => {
+        console.error(JSON.stringify(err));
+      });
   }, []);
 
   const downloadFile = useCallback(
@@ -34,7 +43,7 @@ export default function useProducts() {
         const link = document.createElement("a");
         link.href = res.data;
         link.setAttribute("download", "products.csv");
-        document.body.appendChild(link)
+        document.body.appendChild(link);
         link.click();
       });
     },

@@ -1,7 +1,7 @@
 import { ApiResponse } from "../common/interfaces/ApiResponse";
 import { Page } from "../common/types/page.type";
 
-const ENDPOINT = "http://localhost:3000";
+const ENDPOINT = process.env.API_URL || "http://localhost:3000";
 export const getPages = () => {
   return fetch(`${ENDPOINT}/pages`, {
     headers: {
@@ -26,12 +26,15 @@ export const savePage = (data: Page): Promise<ApiResponse<Page>> => {
       Authorization: `Bearer ${window.sessionStorage.getItem("jwt")}`,
     },
     body: JSON.stringify(data),
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error("There an error getting pages");
-      return res.json();
-    })
-    .then((data) => {
-      return data;
-    });
+  }).then(async (res) => {
+    const isJson = res.headers
+      .get("content-type")
+      ?.includes("application/json");
+    const data = isJson ? await res.json() : null;
+    if (!res.ok) {
+      const error = (data && data.message) || res.status;
+      return Promise.reject(error);
+    }
+    return await data;
+  });
 };

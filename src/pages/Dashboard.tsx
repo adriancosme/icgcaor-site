@@ -2,19 +2,22 @@ import AddIcon from "@mui/icons-material/Add";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {
+  Alert,
   AppBar,
   Box,
   Button,
   Container,
   Divider,
+  Snackbar,
   Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Redirect } from "wouter";
 import { ModalDownloadRegisters } from "../components/downloads/ModalDownloadRegisters";
 import { ModalNewPage } from "../components/pages/ModalNewPage";
+import useErrors from "../hooks/useErrors";
 import usePages from "../hooks/usePages";
 import useProducts from "../hooks/useProducts";
 import useUser from "../hooks/useUser";
@@ -24,13 +27,23 @@ const Dashboard = () => {
   const [openNewPage, setOpenNewPage] = useState(false);
   const [openDownloads, setOpenDownloads] = useState(false);
   const { countProducts, lastUpdate, downloadFile } = useProducts();
-  const { pages, addPage } = usePages();
+  const { pages, addPage, hasError, closeError, errorText } = usePages();
 
   if (!isLoggedIn) {
     return <Redirect to="/login" />;
   }
   return (
     <>
+      <Snackbar
+        open={hasError}
+        autoHideDuration={6000}
+        onClose={closeError}
+        anchorOrigin={{ horizontal: "right", vertical: "top" }}
+      >
+        <Alert onClose={closeError} severity="error" sx={{ width: "100%" }}>
+          {errorText}
+        </Alert>
+      </Snackbar>
       <AppBar
         position="relative"
         color="default"

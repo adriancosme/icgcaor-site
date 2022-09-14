@@ -1,4 +1,4 @@
-const ENDPOINT = "http://localhost:3000";
+const ENDPOINT = process.env.API_URL || "http://localhost:3000";
 
 export default function login({
   email,
