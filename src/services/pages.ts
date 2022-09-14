@@ -1,7 +1,7 @@
 import { ApiResponse } from "../common/interfaces/ApiResponse";
 import { Page } from "../common/types/page.type";
 
-const ENDPOINT = import.meta.env.API_URL || "http://localhost:3000";
+const ENDPOINT = import.meta.env.VITE_API_URL;
 export const getPages = () => {
   return fetch(`${ENDPOINT}/pages`, {
     headers: {
