@@ -122,7 +122,7 @@ const Dashboard = () => {
           {pages.map((page) => {
             return (
               <Box
-                sx={{ display: "flex", justifyContent: "space-between", mx: 5 }}
+                sx={{ display: "flex", justifyContent: "space-between" }}
                 key={page._id}
               >
                 <Box
