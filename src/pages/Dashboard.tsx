@@ -144,7 +144,7 @@ const Dashboard = () => {
                 </Box>
                 <IconButton
                   aria-label="delete"
-                  onClick={() => removePage(page._id)}
+                  onClick={() => (page._id ? removePage(page._id) : null)}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -157,7 +157,7 @@ const Dashboard = () => {
         open={openNewPage}
         handleClose={() => setOpenNewPage(false)}
         addPage={addPage}
-      />      
+      />
     </>
   );
 };
