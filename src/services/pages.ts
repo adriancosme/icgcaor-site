@@ -38,3 +38,23 @@ export const savePage = (data: Page): Promise<ApiResponse<Page>> => {
     return await data;
   });
 };
+
+export const deletePage = (id: string): Promise<ApiResponse<Page>> => {
+  return fetch(`${ENDPOINT}/pages/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${window.sessionStorage.getItem("jwt")}`,
+    },
+  }).then(async (res) => {
+    const isJson = res.headers
+      .get("content-type")
+      ?.includes("application/json");
+    const data = isJson ? await res.json() : null;
+    if (!res.ok) {
+      const error = (data && data.message) || res.status;
+      return Promise.reject(error);
+    }
+    return await data;
+  });
+};

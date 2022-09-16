@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Page } from "../common/types/page.type";
-import { getPages, savePage } from "../services/pages";
+import { deletePage, getPages, savePage } from "../services/pages";
 
 export default function usePages() {
   const [pages, setPages] = useState<Page[]>([]);
@@ -47,6 +47,14 @@ export default function usePages() {
       console.error(error);
     }
   }, []);
+
+  const removePage = useCallback(async (id: string) => {
+    const { data } = await deletePage(id);
+    if (!data) {
+      return;
+    }
+    setPages((prev) => prev.filter((page) => page._id !== id));
+  }, []);
   return {
     pages,
     setPages,
@@ -56,5 +64,6 @@ export default function usePages() {
     showError,
     setText,
     closeError,
+    removePage
   };
 }

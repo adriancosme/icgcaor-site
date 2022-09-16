@@ -1,4 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {
@@ -8,16 +9,17 @@ import {
   Button,
   Container,
   Divider,
+  IconButton,
   Snackbar,
   Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import moment from "moment";
+import { useState } from "react";
 import { Redirect } from "wouter";
 import { ModalDownloadRegisters } from "../components/downloads/ModalDownloadRegisters";
 import { ModalNewPage } from "../components/pages/ModalNewPage";
-import useErrors from "../hooks/useErrors";
 import usePages from "../hooks/usePages";
 import useProducts from "../hooks/useProducts";
 import useUser from "../hooks/useUser";
@@ -27,7 +29,16 @@ const Dashboard = () => {
   const [openNewPage, setOpenNewPage] = useState(false);
   const [openDownloads, setOpenDownloads] = useState(false);
   const { countProducts, lastUpdate, downloadFile } = useProducts();
-  const { pages, addPage, hasError, closeError, errorText } = usePages();
+  const { pages, addPage, hasError, closeError, errorText, removePage } =
+    usePages();
+
+  const handleClickDownload = () => {
+    var currentDate = moment();
+    downloadFile({
+      dateStart: currentDate.clone().startOf("day").toISOString(),
+      dateEnd: currentDate.clone().endOf("day").toISOString(),
+    });
+  };
 
   if (!isLoggedIn) {
     return <Redirect to="/login" />;
@@ -100,7 +111,7 @@ const Dashboard = () => {
             <Button
               variant="contained"
               startIcon={<FileDownloadOutlinedIcon />}
-              onClick={() => setOpenDownloads(true)}
+              onClick={handleClickDownload}
             >
               Descargar registros
             </Button>
@@ -111,21 +122,32 @@ const Dashboard = () => {
           {pages.map((page) => {
             return (
               <Box
-                component="a"
-                sx={{
-                  marginTop: "1rem",
-                  fontSize: "18px",
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "24px",
-                  textDecoration: "none",
-                  color: "#111827",
-                }}
-                href={page.url}
-                target="_blank"
-                rel="noopener,noreferrer"
+                sx={{ display: "flex", justifyContent: "space-between", mx: 5 }}
+                key={page._id}
               >
-                {page.name}
+                <Box
+                  component="a"
+                  sx={{
+                    marginTop: "1rem",
+                    fontSize: "18px",
+                    fontStyle: "normal",
+                    fontWeight: 400,
+                    lineHeight: "24px",
+                    textDecoration: "none",
+                    color: "#111827",
+                  }}
+                  href={page.url}
+                  target="_blank"
+                  rel="noopener,noreferrer"
+                >
+                  {page.name}
+                </Box>
+                <IconButton
+                  aria-label="delete"
+                  onClick={() => removePage(page._id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
               </Box>
             );
           })}
@@ -135,12 +157,7 @@ const Dashboard = () => {
         open={openNewPage}
         handleClose={() => setOpenNewPage(false)}
         addPage={addPage}
-      />
-      <ModalDownloadRegisters
-        open={openDownloads}
-        handleClose={() => setOpenDownloads(false)}
-        downloadFile={downloadFile}
-      />
+      />      
     </>
   );
 };
