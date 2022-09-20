@@ -106,7 +106,7 @@ const Dashboard = () => {
               sx={{ mr: "1.5rem" }}
               onClick={() => setOpenNewPage(true)}
             >
-              Agregar proveedor
+              Agregar enlace
             </Button>
             <Button
               variant="contained"

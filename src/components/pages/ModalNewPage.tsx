@@ -50,7 +50,7 @@ export const ModalNewPage: FC<Props> = ({ open, handleClose, addPage }) => {
           sx={{ textAlign: "center" }}
           fontWeight={500}
         >
-          Agregar proveedor
+          Agregar enlace
         </Typography>
         <Box sx={{ mt: "2rem" }} component="form" onSubmit={handleSubmit}>
           <Grid container spacing={3}>
