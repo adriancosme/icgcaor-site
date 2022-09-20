@@ -11,7 +11,7 @@ import { useLocation } from "wouter";
 import useUser from "../hooks/useUser";
 
 export const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [, navigate] = useLocation();
   const { isLoggedIn, login } = useUser();
@@ -22,11 +22,11 @@ export const Login = () => {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    login({ email, password });
+    login({ username, password });
   };
 
-  const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+  const handleChangeUsername = (event: ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
   };
   const handleChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
@@ -64,14 +64,14 @@ export const Login = () => {
           <Grid item xs={12}>
             <TextField
               required
-              id="email"
-              name="email"
-              label="Correo"
+              id="username"
+              name="username"
+              label="Usuario"
               fullWidth
-              autoComplete="email"
+              autoComplete="username"
               variant="outlined"
-              type="email"
-              onChange={handleChangeEmail}
+              type="text"
+              onChange={handleChangeUsername}
             />
           </Grid>
           <Grid item xs={12}>
@@ -81,7 +81,7 @@ export const Login = () => {
               name="password"
               label="Contraseña"
               fullWidth
-              autoComplete="username"
+              autoComplete="password"
               variant="outlined"
               type="password"
               onChange={handleChangePassword}

@@ -1,9 +1,9 @@
 const ENDPOINT = import.meta.env.VITE_API_URL;
 export default function login({
-  email,
+  username,
   password,
 }: {
-  email: string;
+  username: string;
   password: string;
 }) {
   return fetch(`${ENDPOINT}/auth/login`, {
@@ -11,7 +11,7 @@ export default function login({
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ username, password }),
   })
     .then((res) => {
       if (!res.ok) throw new Error("There an error in login");

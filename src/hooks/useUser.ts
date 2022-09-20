@@ -4,8 +4,8 @@ import loginRequest from "../services/login";
 export default function useUser() {
   const { jwt, setJWT } = useContext(UserContext);
   const login = useCallback(
-    ({ email, password }: { email: string; password: string }) => {
-      loginRequest({ email, password })
+    ({ username, password }: { username: string; password: string }) => {
+      loginRequest({ username, password })
         .then((accessToken) => {
           window.sessionStorage.setItem("jwt", accessToken);
           setJWT(accessToken);
