@@ -1,5 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {
@@ -8,28 +9,26 @@ import {
   Box,
   Button,
   Container,
-  Divider,
-  IconButton,
-  Snackbar,
-  Stack,
-  Toolbar,
-  Typography,
+  Divider, IconButton, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar,
+  Typography
 } from "@mui/material";
 import moment from "moment";
 import { useState } from "react";
 import { Redirect } from "wouter";
-import { ModalDownloadRegisters } from "../components/downloads/ModalDownloadRegisters";
 import { ModalNewPage } from "../components/pages/ModalNewPage";
+import { ModalEditPage } from "../components/pages/ModalEditPage";
 import usePages from "../hooks/usePages";
 import useProducts from "../hooks/useProducts";
 import useUser from "../hooks/useUser";
+import { Page } from "../common/types/page.type";
 
 const Dashboard = () => {
   const { isLoggedIn, logout } = useUser();
   const [openNewPage, setOpenNewPage] = useState(false);
-  const [openDownloads, setOpenDownloads] = useState(false);
+  const [openEditPage, setOpenEditPage] = useState(false);
+  const [editedPage, setEditedPage] = useState<Page>({} as Page);
   const { countProducts, lastUpdate, downloadFile } = useProducts();
-  const { pages, addPage, hasError, closeError, errorText, removePage } =
+  const { pages, addPage, editPage, hasError, closeError, errorText, removePage } =
     usePages();
 
   const handleClickDownload = () => {
@@ -118,46 +117,72 @@ const Dashboard = () => {
           </Box>
         </Box>
         <Divider sx={{ mt: "1rem" }} />
-        <Stack spacing={2} sx={{ mt: "1rem" }}>
-          {pages.map((page) => {
-            return (
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between" }}
-                key={page._id}
-              >
-                <Box
-                  component="a"
-                  sx={{
-                    marginTop: "1rem",
-                    fontSize: "18px",
-                    fontStyle: "normal",
-                    fontWeight: 400,
-                    lineHeight: "24px",
-                    textDecoration: "none",
-                    color: "#111827",
-                  }}
-                  href={page.url}
-                  target="_blank"
-                  rel="noopener,noreferrer"
+
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Proveedor</TableCell>
+                <TableCell>Acciones</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {pages.map((page) => (
+                <TableRow
+                  key={page._id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                  {page.name}
-                </Box>
-                <IconButton
-                  aria-label="delete"
-                  onClick={() => (page._id ? removePage(page._id) : null)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            );
-          })}
-        </Stack>
+                  <TableCell component="th" scope="row">
+                    {page.name}
+                  </TableCell>
+                  <TableCell component="th" scope="row" sx={{ textTransform: 'capitalize' }}>
+                    {page.provider}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => {
+                        if (page._id) {
+                          setEditedPage(page);
+                          setOpenEditPage(true);
+                        }
+                      }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => (page._id ? removePage(page._id) : null)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
       </Container>
-      <ModalNewPage
-        open={openNewPage}
-        handleClose={() => setOpenNewPage(false)}
-        addPage={addPage}
-      />
+      {
+        openNewPage &&
+        <ModalNewPage
+          open={openNewPage}
+          handleClose={() => setOpenNewPage(false)}
+          addPage={addPage}
+        />
+      }
+      {openEditPage &&
+        <ModalEditPage
+          open={openEditPage}
+          handleClose={() => {
+            setOpenEditPage(false);
+            setEditedPage({} as Page);
+          }}
+          editPage={editPage}
+          page={editedPage}
+        />}
     </>
   );
 };

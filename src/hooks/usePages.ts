@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Page } from "../common/types/page.type";
-import { deletePage, getPages, savePage } from "../services/pages";
+import { deletePage, getPages, savePage, updatePage } from "../services/pages";
 
 export default function usePages() {
   const [pages, setPages] = useState<Page[]>([]);
@@ -27,14 +27,41 @@ export default function usePages() {
     });
   }, []);
 
-  const addPage = useCallback(async ({ url, name }: Page) => {
+  const addPage = useCallback(async ({ url, name, provider }: Page) => {
     try {
       const pageUrl = new URL(url);
-      const payload = { name: name, url: pageUrl.toString() };
+      const payload = { name, url: pageUrl.toString(), provider };
       const { data } = await savePage(payload);
       setPages((prevArr) => {
         return [...prevArr, data];
       });
+    } catch (error: any) {
+      const isArray = Array.isArray(error);
+      if (isArray) {
+        setErrorText(error.join(","));
+        showError();
+        return;
+      }
+      setErrorText(error.message);
+      showError();
+      console.error(error);
+    }
+  }, []);
+
+  const editPage = useCallback(async ({ _id, url, name, provider }: Page) => {
+    try {
+      const pageUrl = new URL(url);
+      const payload = { _id, name, url: pageUrl.toString(), provider };
+      const { data } = await updatePage(payload);
+      if (!data) {
+        return;
+      }      
+      setPages((prev) => {
+        const newPages = [...prev];        
+        const indexPage = newPages.findIndex(value => value._id === data._id);
+        newPages[indexPage] = data;
+        return newPages;
+      })
     } catch (error: any) {
       const isArray = Array.isArray(error);
       if (isArray) {
@@ -59,6 +86,7 @@ export default function usePages() {
     pages,
     setPages,
     addPage,
+    editPage,
     hasError,
     errorText,
     showError,

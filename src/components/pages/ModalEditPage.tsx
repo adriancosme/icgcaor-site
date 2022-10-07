@@ -1,3 +1,4 @@
+import { AddAPhoto } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -9,17 +10,18 @@ import {
   Select,
   Stack,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useEffect, useState } from "react";
 import { Page } from "../../common/types/page.type";
 type Props = {
   open: boolean;
+  page: Page;
   handleClose: () => void;
-  addPage: (payload: Page) => void;
+  editPage: (payload: Page) => void;
 };
 
-export const ModalNewPage: FC<Props> = ({ open, handleClose, addPage }) => {
+export const ModalEditPage: FC<Props> = ({ open, handleClose, editPage, page }) => {
   const style = {
     position: "absolute" as "absolute",
     top: "50%",
@@ -33,10 +35,16 @@ export const ModalNewPage: FC<Props> = ({ open, handleClose, addPage }) => {
 
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
-  const [provider, setProvider] = useState("");  
+  const [provider, setProvider] = useState("");
+
+  useEffect(() => {    
+    setName(page.name ?? '');
+    setUrl(page.url ?? '');
+    setProvider(page.provider ?? '');
+  }, [])
   const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    addPage({ name, url, provider });
+    event.preventDefault();    
+    editPage({ _id: page._id, name: name, url: url, provider: provider });
     handleClose();
   };
   return (
@@ -67,6 +75,7 @@ export const ModalNewPage: FC<Props> = ({ open, handleClose, addPage }) => {
                 fullWidth
                 variant="outlined"
                 type="text"
+                value={name}
                 onChange={(e) => setName(e.target.value)}
               />
             </Grid>
@@ -95,13 +104,16 @@ export const ModalNewPage: FC<Props> = ({ open, handleClose, addPage }) => {
                 fullWidth
                 variant="outlined"
                 type="text"
-                onChange={(e) => setUrl(e.target.value)}
+                value={url}
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={12}>
               <Stack spacing={2} direction="row-reverse">
                 <Button type="submit" variant="contained">
-                  Agregar
+                  Actualizar
                 </Button>
                 <Button variant="text" onClick={handleClose}>
                   Cancelar
