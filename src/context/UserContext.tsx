@@ -9,7 +9,9 @@ type Props = {
   children?: ReactNode;
 };
 const UserContextProvider: FC<Props> = ({ children }) => {
+  // @ts-ignore
   const [jwt, setJWT] = useState<string | null>(() => secureLocalStorage.getItem('jwt'));
+  // @ts-ignore
   const [user, setUser] = useState<IUser | null>(() => secureLocalStorage.getItem('user'));
   return (
     <UserContext.Provider value={{ jwt, setJWT, user, setUser }}>
