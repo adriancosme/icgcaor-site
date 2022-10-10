@@ -43,7 +43,7 @@ const Users = () => {
                             sx={{ mr: "1.5rem" }}
                             onClick={() => setOpenNewUser(true)}
                         >
-                            Agregar enlace
+                            Agregar usuario
                         </Button>
                     </Box>
                 </Box>

@@ -8,11 +8,9 @@ export const UserContext = createContext<UserContextType>(
 type Props = {
   children?: ReactNode;
 };
-const UserContextProvider: FC<Props> = ({ children }) => {
-  // @ts-ignore
-  const [jwt, setJWT] = useState<string | null>(() => secureLocalStorage.getItem('jwt'));
-  // @ts-ignore
-  const [user, setUser] = useState<IUser | null>(() => secureLocalStorage.getItem('user'));
+const UserContextProvider: FC<Props> = ({ children }) => {  
+  const [jwt, setJWT] = useState<string | null>(() => secureLocalStorage.getItem('jwt') as string);  
+  const [user, setUser] = useState<IUser | null>(() => secureLocalStorage.getItem('user') as IUser);
   return (
     <UserContext.Provider value={{ jwt, setJWT, user, setUser }}>
       {children}
