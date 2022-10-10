@@ -77,15 +77,13 @@ export const ModalDownloadRegisters: FC<Props> = ({
         dateEnd: dateEnd.toISOString(),
       });
     }
-    if (isTodaySelected) {
-      console.log("isTodaySelected");
+    if (isTodaySelected) {      
       downloadFile({
         dateStart: currentDate.clone().startOf("day").toISOString(),
         dateEnd: currentDate.clone().endOf("day").toISOString(),
       });
     }
-    if (isYesterdaySelected) {
-      console.log("isYesterdaySelected");
+    if (isYesterdaySelected) {      
       downloadFile({
         dateStart: currentDate
           .clone()
@@ -99,8 +97,7 @@ export const ModalDownloadRegisters: FC<Props> = ({
           .toISOString(),
       });
     }
-    if (isWeekSelected) {
-      console.log("isWeekSelected");
+    if (isWeekSelected) {      
       downloadFile({
         dateStart: currentDate.clone().startOf("isoWeek").toISOString(),
         dateEnd: currentDate.clone().endOf("isoWeek").toISOString(),

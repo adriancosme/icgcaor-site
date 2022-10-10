@@ -1,4 +1,3 @@
-import { AddAPhoto } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -10,18 +9,18 @@ import {
   Select,
   Stack,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { FC, FormEvent, useEffect, useState } from "react";
-import { Page } from "../../common/types/page.type";
+import { IUser } from "../../common/types/user.type";
 type Props = {
   open: boolean;
-  page: Page;
+  user: IUser;
   handleClose: () => void;
-  editPage: (payload: Page) => void;
+  editUser: (payload: IUser) => void;
 };
 
-export const ModalEditPage: FC<Props> = ({ open, handleClose, editPage, page }) => {
+export const ModalEditUser: FC<Props> = ({ open, handleClose, editUser, user }) => {
   const style = {
     position: "absolute" as "absolute",
     top: "50%",
@@ -33,18 +32,23 @@ export const ModalEditPage: FC<Props> = ({ open, handleClose, editPage, page }) 
     p: 4,
   };
 
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
-  const [provider, setProvider] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
 
   useEffect(() => {    
-    setName(page.name ?? '');
-    setUrl(page.url ?? '');
-    setProvider(page.provider ?? '');
+    setUsername(user.username ?? '');
+    setRole(user.role ?? '');    
   }, [])
   const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();    
-    editPage({ _id: page._id, name: name, url: url, provider: provider });
+    event.preventDefault();
+    const payload: IUser = {
+      _id: user._id, username, role
+    }
+    if (password.length > 0) {
+      payload['password'] = password
+    }
+    editUser(payload);
     handleClose();
   };
   return (
@@ -62,58 +66,56 @@ export const ModalEditPage: FC<Props> = ({ open, handleClose, editPage, page }) 
           sx={{ textAlign: "center" }}
           fontWeight={500}
         >
-          Editar enlace
+          Editar usuario
         </Typography>
         <Box sx={{ mt: "2rem" }} component="form" onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12}>
               <TextField
                 required
-                id="name"
-                name="name"
-                label="Nombre"
+                id="username"
+                name="username"
+                label="Usuario"
                 fullWidth
                 variant="outlined"
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <TextField                
+                id="password"
+                name="password"
+                label="Password"
+                fullWidth
+                variant="outlined"
+                type="password"
+                autoComplete="off"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={12}>
               <FormControl fullWidth>
-                <InputLabel id="provider-select-label">Proveedor</InputLabel>
+                <InputLabel id="role-select-label">Rol</InputLabel>
                 <Select
-                  labelId="provider-select-label"
+                  labelId="role-select-label"
                   required
-                  name="provider"
-                  label="Proveedor"
-                  value={provider}
-                  onChange={(e) => setProvider(e.target.value as string)}
+                  name="role"
+                  label="Rol"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value as string)}
                 >
-                  <MenuItem value="indar">Indar</MenuItem>
-                  <MenuItem value="surtimex">Surtimex</MenuItem>
+                  <MenuItem value="user">User</MenuItem>
+                  <MenuItem value="admin">Admin</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={12}>
-              <TextField
-                required
-                id="url"
-                name="url"
-                label="URL"
-                fullWidth
-                variant="outlined"
-                type="text"
-                value={url}
-                onChange={(e) => {
-                  setUrl(e.target.value);
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
               <Stack spacing={2} direction="row-reverse">
                 <Button type="submit" variant="contained">
-                  Actualizar
+                  Guardar
                 </Button>
                 <Button variant="text" onClick={handleClose}>
                   Cancelar

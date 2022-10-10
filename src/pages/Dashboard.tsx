@@ -21,6 +21,7 @@ import usePages from "../hooks/usePages";
 import useProducts from "../hooks/useProducts";
 import useUser from "../hooks/useUser";
 import { Page } from "../common/types/page.type";
+import UserLayout from "../layouts/UserLayout";
 
 const Dashboard = () => {
   const { isLoggedIn, logout } = useUser();
@@ -54,34 +55,7 @@ const Dashboard = () => {
           {errorText}
         </Alert>
       </Snackbar>
-      <AppBar
-        position="relative"
-        color="default"
-        elevation={0}
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-around",
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <Typography variant="h6" color="primary" noWrap>
-            Inteligencia comercial
-          </Typography>
-        </Toolbar>
-        <Toolbar>
-          <Button
-            color="secondary"
-            variant="outlined"
-            startIcon={<LogoutIcon />}
-            onClick={logout}
-          >
-            Cerrar sesion
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <Container maxWidth="xl">
+      <UserLayout>
         <Typography variant="h4" fontWeight={500}>
           Mayorista ferretero
         </Typography>
@@ -163,8 +137,7 @@ const Dashboard = () => {
             </TableBody>
           </Table>
         </TableContainer>
-
-      </Container>
+      </UserLayout>
       {
         openNewPage &&
         <ModalNewPage

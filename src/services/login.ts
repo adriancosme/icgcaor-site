@@ -1,3 +1,5 @@
+import { IUser } from "../common/types/user.type";
+
 const ENDPOINT = import.meta.env.VITE_API_URL;
 export default function login({
   username,
@@ -19,8 +21,8 @@ export default function login({
     })
     .then((data) => {
       const {
-        data: { accessToken },
+        data: { accessToken, user },
       } = data;
-      return accessToken;
+      return { accessToken, user };
     });
 }

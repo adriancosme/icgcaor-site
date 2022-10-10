@@ -10,6 +10,7 @@ import "./App.css";
 import UserContextProvider from "./context/UserContext";
 import theme from "./hooks/useTheme";
 import Dashboard from "./pages/Dashboard";
+import Users from "./pages/Users";
 import { Login } from "./pages/Login";
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
             <CssBaseline />
             <Switch>
               <Route path="/login" component={Login} />
-              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/dashboard" component={Dashboard}  />
+              <Route path="/users" component={Users} />
               <Route component={Login} />
             </Switch>
           </ThemeProvider>

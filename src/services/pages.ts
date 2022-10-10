@@ -1,12 +1,12 @@
 import { ApiResponse } from "../common/interfaces/ApiResponse";
 import { Page } from "../common/types/page.type";
-
+import secureLocalStorage from "react-secure-storage";
 const ENDPOINT = import.meta.env.VITE_API_URL;
 export const getPages = () => {
   return fetch(`${ENDPOINT}/pages`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${window.sessionStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${secureLocalStorage.getItem("jwt")}`,
     },
   })
     .then((res) => {
@@ -23,7 +23,7 @@ export const savePage = (data: Page): Promise<ApiResponse<Page>> => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${window.sessionStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${secureLocalStorage.getItem("jwt")}`,
     },
     body: JSON.stringify(data),
   }).then(async (res) => {
@@ -44,7 +44,7 @@ export const updatePage = (data: Page): Promise<ApiResponse<Page>> => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${window.sessionStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${secureLocalStorage.getItem("jwt")}`,
     },
     body: JSON.stringify(data),
   }).then(async (res) => {
@@ -65,7 +65,7 @@ export const deletePage = (id: string): Promise<ApiResponse<Page>> => {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${window.sessionStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${secureLocalStorage.getItem("jwt")}`,
     },
   }).then(async (res) => {
     const isJson = res.headers

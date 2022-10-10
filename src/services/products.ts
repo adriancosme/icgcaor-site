@@ -1,5 +1,5 @@
 const ENDPOINT = import.meta.env.VITE_API_URL;
-
+import secureLocalStorage from "react-secure-storage";
 export const downloadCSVProducts = ({
   dateStart,
   dateEnd,
@@ -11,7 +11,7 @@ export const downloadCSVProducts = ({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${window.sessionStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${secureLocalStorage.getItem("jwt")}`,
     },
     body: JSON.stringify({ dateStart, dateEnd }),
   })
@@ -29,7 +29,7 @@ export const getCountProducts = () => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${window.sessionStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${secureLocalStorage.getItem("jwt")}`,
     },
   })
     .then((res) => {
@@ -46,7 +46,7 @@ export const getLastUpdate = () => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${window.sessionStorage.getItem("jwt")}`,
+      Authorization: `Bearer ${secureLocalStorage.getItem("jwt")}`,
     },
   })
     .then((res) => {
